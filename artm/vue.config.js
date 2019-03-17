@@ -1,19 +1,20 @@
 // vue.config.js
 module.exports = {
+		assetsDir:"assets",
 		pages: {
-		    index: {
+		    main: {
 		    	entry: 'src/main.js',
 		    	template: 'public/index.html',
 		    	filename: 'index.html',
 		    	title: 'Artmoments',
-		    	chunks: ['chunk-vendors', 'chunk-common', 'index']
+		    	chunks: ['chunk-vendors', 'chunk-common', 'main']
 		    },
-		    index: {
+		    admin: {
 		    	entry: 'src/admin.js',
 			    template: 'public/index.html',
-			    filename: 'admin.html',
+			    filename: 'admin/index.html',
 			    title: 'Artmoments Admin',
 			    chunks: ['chunk-vendors', 'chunk-common', 'admin']
-		    },
+		    }
 		}
 }
