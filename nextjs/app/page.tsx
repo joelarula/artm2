@@ -12,52 +12,51 @@ export default async function PortfolioPage() {
   const images = (await fetchAllImageMeta()).filter(img => img.published && img.imagePath);
   const categories = await fetchCategories();
 
+  // Map categoryKey to link for each image
+  const catKeyToLink = Object.fromEntries(categories.map(cat => [cat.key, cat.link]));
   return (
     <main style={{ padding: '2rem' }}>
-      <h1 style={{ textAlign: 'center', marginBottom: '2rem' }}>Artmoments</h1>
-      <nav style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem', gap: '1.5rem', flexWrap: 'wrap' }}>
-        {categories.map(cat => (
-          <Link
-            key={cat.key}
-            href={cat.link}
-            style={{
-              textDecoration: 'none',
-              color: '#333',
-              fontWeight: 500,
-              fontSize: '1.1rem',
-              padding: '0.5rem 1.2rem',
-              borderRadius: 20,
-              background: '#f5f5f5',
-              border: '1px solid #e0e0e0',
-              transition: 'background 0.2s',
-              marginBottom: '0.5rem',
-              display: 'inline-block',
-            }}
-          >
-            {cat.name}
-          </Link>
-        ))}
-      </nav>
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
         gap: '2rem',
       }}>
-        {images.map(img => (
-          <Link key={img.key} href={`/painting/${img.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-            <div style={{ border: '1px solid #eee', borderRadius: 8, overflow: 'hidden', background: '#fff', boxShadow: '0 2px 8px #0001', transition: 'box-shadow 0.2s', cursor: 'pointer' }}>
-              <img
-                src={`/gallery/data/catalog/original/${img.key}.png`}
-                alt={img.name}
-                style={{ width: '100%', height: 180, objectFit: 'cover', display: 'block' }}
-              />
-              <div style={{ padding: '1rem' }}>
-                <h2 style={{ margin: 0, fontSize: '1.1rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{img.name}</h2>
-                <div style={{ color: '#888', fontSize: '0.9rem', marginBottom: 4 }}>{img.author} &middot; {img.category}</div>
+        {images.map(img => {
+          // Type guards for category and author
+          const getCategoryKey = (cat: any) => {
+            if (typeof cat === 'string') return cat;
+            if (cat && typeof cat === 'object' && 'key' in cat && typeof cat.key === 'string') return cat.key;
+            return '';
+          };
+          const getCategoryName = (cat: any) => {
+            if (typeof cat === 'string') return cat;
+            if (cat && typeof cat === 'object' && 'name' in cat && typeof cat.name === 'string') return cat.name;
+            return '';
+          };
+          const getAuthorName = (author: any) => {
+            if (typeof author === 'string') return author;
+            if (author && typeof author === 'object' && 'name' in author && typeof author.name === 'string') return author.name;
+            return '';
+          };
+          const catKey = getCategoryKey(img.category);
+          const catName = getCategoryName(img.category);
+          const authorName = getAuthorName(img.author);
+          return (
+            <Link key={img.key} href={`/painting/${catKeyToLink[catKey]}/${img.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <div style={{ border: '1px solid #eee', borderRadius: 8, overflow: 'hidden', background: '#fff', boxShadow: '0 2px 8px #0001', transition: 'box-shadow 0.2s', cursor: 'pointer' }}>
+                <img
+                  src={`/gallery/data/catalog/original/${img.key}.png`}
+                  alt={img.name}
+                  style={{ width: '100%', height: 180, objectFit: 'cover', display: 'block' }}
+                />
+                <div style={{ padding: '1rem' }}>
+                  <h2 style={{ margin: 0, fontSize: '1.1rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{img.name}</h2>
+                  <div style={{ color: '#888', fontSize: '0.9rem', marginBottom: 4 }}>{authorName} &middot; {catName}</div>
+                </div>
               </div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          );
+        })}
       </div>
     </main>
   );

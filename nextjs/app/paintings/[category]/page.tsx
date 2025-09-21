@@ -1,7 +1,12 @@
 import type { Category } from '../../../lib/categoryData';
 import type { ImageMeta } from '../../../lib/imageData';
+// Make sure GalleryCategoryClient.tsx exists in the same folder as this file.
+// If it exists elsewhere, update the import path accordingly.
+// Make sure the following import path is correct and the file exists.
+// If GalleryCategoryClient.tsx is in a different folder, update the path accordingly.
 import GalleryCategoryClient from './GalleryCategoryClient';
 import { fetchCategories } from '../../../lib/categoryData';
+import { slugify } from '../../../lib/imageData';
 
 // SSG: generate all category params
 export async function generateStaticParams() {
@@ -40,7 +45,7 @@ export default async function GalleryCategoryPage(props: { params: { category: s
     name: img.name,
     description: img.description || null,
     photo: img.photo,
-    author: img.author?.name || '',
+    author: typeof img.author === 'string' ? img.author : (img.author?.code || ''),
     translation_en: img.translation_en || null,
     category: cat.key,
     stock: img.stock || null,
@@ -48,7 +53,7 @@ export default async function GalleryCategoryPage(props: { params: { category: s
     created: img.created || null,
     modified: img.modified || null,
     imagePath: `/gallery/data/catalog/original/${img.key}.png`,
-    slug: img.key, // fallback, ideally use slugify(img.name)
+    slug: slugify(img.name || img.key),
   }));
   return (
     <GalleryCategoryClient

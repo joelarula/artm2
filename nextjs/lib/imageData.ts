@@ -17,7 +17,7 @@ export type ImageMeta = {
 };
 
 
-function slugify(str: string): string {
+export function slugify(str: string): string {
   return str
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
@@ -33,19 +33,48 @@ export async function fetchAllImageMeta(baseUrl?: string): Promise<ImageMeta[]> 
     }
     return path;
   }
-  const dbIndexRes = await fetch(getUrl('/gallery/data/db.json'));
-  if (!dbIndexRes.ok) return [];
-  const dbIndex = await dbIndexRes.json();
-  const files: string[] = dbIndex.images || [];
-  const images: Omit<ImageMeta, 'slug'>[] = [];
-  for (const file of files) {
-    const metaRes = await fetch(getUrl(`/gallery/data/db/${file}`));
-    if (!metaRes.ok) continue;
-    const meta = await metaRes.json();
-    images.push({
-      ...meta,
-      imagePath: `/gallery/data/catalog/original/${meta.key}.png`,
-    });
+
+  // Fetch category keys from db.json
+  let categoryKeys: string[] = [];
+  try {
+    const dbRes = await fetch(getUrl('/gallery/data/db.json'));
+    if (dbRes.ok) {
+      const db = await dbRes.json();
+      if (db && db.categories) {
+        categoryKeys = Object.keys(db.categories);
+      }
+    }
+  } catch (e) {
+    // ignore
+  }
+
+  let images: (Omit<ImageMeta, 'slug'> & { categoryKey: string })[] = [];
+  for (const key of categoryKeys) {
+    try {
+      const res = await fetch(getUrl(`/gallery/data/${key}.json`));
+      if (!res.ok) continue;
+      const arr = await res.json();
+      if (Array.isArray(arr)) {
+        images = images.concat(
+          arr.map((meta: any) => {
+            // Normalize category field to always be an object with link, name, exposed
+            let category = meta.category;
+            if (!category || typeof category !== 'object' || !('link' in category)) {
+              // fallback: get from db.json if possible
+              category = undefined;
+            }
+            return {
+              ...meta,
+              imagePath: `/gallery/data/catalog/original/${meta.key}.png`,
+              categoryKey: key,
+              category: category && typeof category === 'object' && 'link' in category ? category : undefined,
+            };
+          })
+        );
+      }
+    } catch (e) {
+      // ignore missing category files
+    }
   }
   // Ensure unique slugs
   const slugMap = new Map<string, number>();
@@ -58,7 +87,8 @@ export async function fetchAllImageMeta(baseUrl?: string): Promise<ImageMeta[]> 
       slug = `${baseSlug}-${n}`;
     }
     slugMap.set(slug, 1);
-    return { ...img, slug };
+    // include categoryKey in returned object
+    return { ...img, slug, categoryKey: img.categoryKey };
   });
 }
 
