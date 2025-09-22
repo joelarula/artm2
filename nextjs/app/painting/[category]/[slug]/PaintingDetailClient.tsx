@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import { useState, useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import type { ImageMeta } from '../../../../lib/imageData';
 
@@ -18,23 +18,9 @@ export default function PaintingDetailClient({ img, prev, next, current, onNav, 
 }) {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [open, setOpen] = useState(false);
-
-  // Open lightbox if ?lightbox=1 is present, but don't close if already open and navigating
-  useEffect(() => {
-    if (searchParams.get('lightbox') === '1') {
-      setOpen(true);
-    }
-    // Do not setOpen(false) here; only close on explicit user action
-  }, [searchParams]);
-  // If parent says lightboxOpen, force open
-  useEffect(() => {
-    if (lightboxOpen) setOpen(true);
-  }, [lightboxOpen]);
 
   // When closing, remove ?lightbox=1 from URL
   function handleClose() {
-    setOpen(false);
     const params = new URLSearchParams(Array.from(searchParams.entries()));
     params.delete('lightbox');
     router.replace('?' + params.toString(), { scroll: false });
@@ -52,12 +38,11 @@ export default function PaintingDetailClient({ img, prev, next, current, onNav, 
               const params = new URLSearchParams(Array.from(searchParams.entries()));
               params.set('lightbox', '1');
               router.replace('?' + params.toString(), { scroll: false });
-              setOpen(true);
             }}
           />
         ) : null}
       </div>
-      {open && img && (
+      {searchParams.get('lightbox') === '1' && img && (
         <Lightbox
           src={img.photo?.startsWith('/') ? img.photo : `/db/photos/${img.photo}`}
           alt={img.name}
