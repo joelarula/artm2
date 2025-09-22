@@ -241,33 +241,48 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 }}
                 aria-label="Artmoments koduleht"
               >
-                <span
-                  style={{
-                    fontSize: '2.5rem',
-                    fontWeight: 300,
-                    letterSpacing: 6,
-                    color: 'var(--foreground)',
-                    fontFamily: 'var(--font-geist-sans), Roboto, Arial, Helvetica, sans-serif, \"Pacifico\", \"Comic Sans MS\", cursive',
-                    lineHeight: 1.1,
-                    display: 'inline-block',
-                    userSelect: 'none',
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  artmoments
-                </span>
-                <div
-                  style={{
-                    fontSize: '1.18rem',
-                    fontWeight: 400,
-                    color: 'var(--muted, #888)',
-                    marginTop: 6,
-                    letterSpacing: 0.1,
-                    fontFamily: 'Roboto, Arial, Helvetica, sans-serif',
-                  }}
-                >
-                  akrüülmaalid lõuendil
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 32, marginBottom: 10 }}>
+                  <img
+                    src="/assets/lillelogo.png"
+                    alt="Artmoments lille logo"
+                    style={{
+                      width: 160,
+                      height: 160,
+                      verticalAlign: 'middle',
+                      display: 'block',
+                    }}
+                  />
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center' }}>
+                    <span
+                      style={{
+                        fontSize: '2.5rem',
+                        fontWeight: 300,
+                        letterSpacing: 6,
+                        color: 'var(--foreground)',
+                        fontFamily: 'var(--font-geist-sans), Roboto, Arial, Helvetica, sans-serif, \"Pacifico\", \"Comic Sans MS\", cursive',
+                        lineHeight: 1.1,
+                        display: 'inline-block',
+                        userSelect: 'none',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      artmoments
+                    </span>
+                    <div
+                      style={{
+                        fontSize: '1.18rem',
+                        fontWeight: 400,
+                        color: 'var(--muted, #888)',
+                        marginTop: 8,
+                        letterSpacing: 0.1,
+                        fontFamily: 'Roboto, Arial, Helvetica, sans-serif',
+                      }}
+                    >
+                      akrüülmaalid lõuendil
+                    </div>
+                  </div>
                 </div>
+                {/* subtitle moved above, next to logo */}
               </a>
             </div>
           </div>
