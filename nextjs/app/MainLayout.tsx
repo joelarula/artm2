@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, createContext, useContext } from 'react';
+import { useEffect as useLayoutEffect, useState as useLayoutState } from 'react';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -30,6 +31,16 @@ if (typeof document !== 'undefined' && !document.getElementById('roboto-font')) 
   link.rel = 'stylesheet';
   link.href = 'https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap';
   document.head.appendChild(link);
+}
+
+function useContactData() {
+  const [contact, setContact] = useLayoutState<{ phone?: string; email?: string } | null>(null);
+  useLayoutEffect(() => {
+    fetch('/db/contact.json')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => setContact(data));
+  }, []);
+  return contact;
 }
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
@@ -121,6 +132,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     if (match) activeCategoryLink = match[1];
   }
 
+  const contact = useContactData();
   return (
     <MainLayoutContext.Provider value={{ bg, toggleBg, catalog }}>
   <div style={{ fontFamily: 'Roboto, Arial, Helvetica, sans-serif' }}>
@@ -213,20 +225,30 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 marginBottom: '40px',
               }}
             >
-              <span
+              <a
+                href="/"
                 style={{
-                  fontSize: '2.5rem',
-                  fontWeight: 800,
-                  letterSpacing: 1,
-                  color: 'var(--foreground)',
-                  fontFamily: 'var(--font-geist-sans), Arial, Helvetica, sans-serif',
-                  lineHeight: 1.1,
-                  display: 'inline-block',
-                  userSelect: 'none',
+                  textDecoration: 'none',
+                  color: 'inherit',
+                  cursor: 'pointer',
                 }}
+                aria-label="Artmoments homepage"
               >
-                artmoments
-              </span>
+                <span
+                  style={{
+                    fontSize: '2.5rem',
+                    fontWeight: 800,
+                    letterSpacing: 1,
+                    color: 'var(--foreground)',
+                    fontFamily: 'var(--font-geist-sans), Arial, Helvetica, sans-serif',
+                    lineHeight: 1.1,
+                    display: 'inline-block',
+                    userSelect: 'none',
+                  }}
+                >
+                  artmoments
+                </span>
+              </a>
             </div>
           </div>
           <nav style={{ width: '100%', display: 'flex', justifyContent: 'center', margin: 0, marginTop: '-0.5rem' }}>
@@ -270,6 +292,24 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           {/* Dark/Light button moved to top left */}
         </header>
         <main style={{ minHeight: '80vh', padding: 0 }}>{children}</main>
+        <footer style={{
+          width: '100%',
+          textAlign: 'center',
+          fontSize: '1.08rem',
+          color: 'var(--muted, #888)',
+          background: 'none',
+          marginTop: 32,
+          marginBottom: 18,
+          letterSpacing: 0.01,
+        }}>
+          {contact && contact.phone && contact.email && (
+            <span>
+              Kontakt: helista <a href={`tel:${contact.phone}`} style={{ color: 'inherit', textDecoration: 'underline dotted' }}>{contact.phone}</a>
+              {" või saada sõnum "}
+              <a href={`mailto:${contact.email.trim()}`} style={{ color: 'inherit', textDecoration: 'underline dotted' }}>{contact.email.trim()}</a>
+            </span>
+          )}
+        </footer>
       </div>
   </MainLayoutContext.Provider>
   );

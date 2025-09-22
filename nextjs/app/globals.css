@@ -1,3 +1,9 @@
+/* Ensure markdown sections have no background and readable text in all modes */
+section, section * {
+  background: none !important;
+  color: var(--foreground) !important;
+  box-shadow: none !important;
+}
 /* Gallery grid responsive columns: max 4 columns on wide screens */
 .gallery-grid {
   display: grid;
