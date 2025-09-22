@@ -251,44 +251,47 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
               </a>
             </div>
           </div>
-          <nav style={{ width: '100%', display: 'flex', justifyContent: 'center', margin: 0, marginTop: '-0.5rem' }}>
-            {categories.length === 0 ? (
-              <div style={{ color: 'var(--muted)', fontSize: '1.1rem', padding: '0.7rem 0' }}>
-                Loading galleries...
-              </div>
-            ) : (
-              <ul style={{ display: 'flex', flexWrap: 'wrap', gap: '1.2rem', listStyle: 'none', padding: 0, margin: 0 }}>
-                {categories.map((cat) => {
-                  const isActive = cat.link === activeCategoryLink;
-                  return (
-                    <li key={cat.key}>
-                      <Link
-                        href={`/paintings/${cat.link}`}
-                        style={{
-                          textDecoration: 'none',
-                          color: isActive ? 'var(--foreground)' : 'inherit',
-                          fontWeight: isActive ? 700 : 500,
-                          padding: isActive ? '0.3rem 1.1rem' : '0.3rem 1rem',
-                          borderRadius: 8,
-                          transition: 'all 0.18s',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          verticalAlign: 'middle',
-                          background: undefined,
-                          boxShadow: undefined,
-                          fontSize: isActive ? '1.13rem' : '1rem',
-                          transform: isActive ? 'scale(1.08)' : 'none',
-                          zIndex: isActive ? 1 : undefined,
-                        }}
-                      >
-                        {cat.name}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </nav>
+          {/* Hide main menu on front page ("/") */}
+          {pathname !== "/" && (
+            <nav style={{ width: '100%', display: 'flex', justifyContent: 'center', margin: 0, marginTop: '-0.5rem' }}>
+              {categories.length === 0 ? (
+                <div style={{ color: 'var(--muted)', fontSize: '1.1rem', padding: '0.7rem 0' }}>
+                  Loading galleries...
+                </div>
+              ) : (
+                <ul style={{ display: 'flex', flexWrap: 'wrap', gap: '1.2rem', listStyle: 'none', padding: 0, margin: 0 }}>
+                  {categories.map((cat) => {
+                    const isActive = cat.link === activeCategoryLink;
+                    return (
+                      <li key={cat.key}>
+                        <Link
+                          href={`/paintings/${cat.link}`}
+                          style={{
+                            textDecoration: 'none',
+                            color: isActive ? 'var(--foreground)' : 'inherit',
+                            fontWeight: isActive ? 700 : 500,
+                            padding: isActive ? '0.3rem 1.1rem' : '0.3rem 1rem',
+                            borderRadius: 8,
+                            transition: 'all 0.18s',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            verticalAlign: 'middle',
+                            background: undefined,
+                            boxShadow: undefined,
+                            fontSize: isActive ? '1.13rem' : '1rem',
+                            transform: isActive ? 'scale(1.08)' : 'none',
+                            zIndex: isActive ? 1 : undefined,
+                          }}
+                        >
+                          {cat.name}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </nav>
+          )}
           {/* Dark/Light button moved to top left */}
         </header>
         <main style={{ minHeight: '80vh', padding: 0 }}>{children}</main>

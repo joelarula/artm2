@@ -1,3 +1,13 @@
+/* Responsive gallery thumbnails: single row on wide screens */
+.gallery-thumbnails-responsive {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 36px 36px;
+  justify-items: center;
+  align-items: start;
+  max-width: 540px;
+  margin: 2.5rem auto 2.5rem auto;
+}
 /* Ensure markdown sections have no background and readable text in all modes */
 section, section * {
   background: none !important;

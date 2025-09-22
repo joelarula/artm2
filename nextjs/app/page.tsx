@@ -20,8 +20,8 @@ export default async function PortfolioPage() {
   const catKeyToLink = Object.fromEntries(categories.map(cat => [cat.key, cat.link]));
   return (
     <main style={{ padding: '2rem' }}>
-      <MarkdownFrontMatter />
       <GalleryThumbnails />
+      <MarkdownFrontMatter />
     </main>
   );
 }

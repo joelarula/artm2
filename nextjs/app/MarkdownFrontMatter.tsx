@@ -32,6 +32,7 @@ export default function MarkdownFrontMatter() {
         lineHeight: 1.7,
         fontSize: '1.08rem',
         wordBreak: 'break-word',
+        textAlign: 'center',
         /* Removed textShadow and any background for clean, readable text in both modes */
       }}
     >
