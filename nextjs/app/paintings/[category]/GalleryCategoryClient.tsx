@@ -22,7 +22,7 @@ export default function GalleryCategoryClient({ images, cat }: GalleryCategoryCl
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-        gap: '2rem',
+        gap: '1.1rem', // smaller grid gap
       }}>
         {images.length === 0 && <div style={{gridColumn: '1/-1', textAlign: 'center', color: isDark ? '#aaa' : '#888'}}>No images in this category.</div>}
         {images.map((img: ImageMeta) => (
@@ -36,6 +36,7 @@ export default function GalleryCategoryClient({ images, cat }: GalleryCategoryCl
                 boxShadow: isDark ? '0 2px 12px #0008' : '0 2px 8px #0001',
                 transition: 'box-shadow 0.2s',
                 cursor: 'pointer',
+                margin: '1.3rem', // add more margin to each card for even more space
               }}
             >
                 <img
