@@ -16,11 +16,13 @@ export default async function PortfolioPage() {
   const catKeyToLink = Object.fromEntries(categories.map(cat => [cat.key, cat.link]));
   return (
     <main style={{ padding: '2rem' }}>
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-        gap: '2rem',
-      }}>
+      <div
+        style={{
+          display: 'grid',
+          gap: '2rem',
+        }}
+        className="gallery-grid"
+      >
         {images.map(img => {
           // Type guards for category and author
           const getCategoryKey = (cat: any) => {

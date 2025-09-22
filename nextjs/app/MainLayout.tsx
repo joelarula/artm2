@@ -12,14 +12,27 @@ export function useBg() {
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const [search, setSearch] = useState('');
   const router = useRouter();
-  const [bg, setBg] = useState<'dark' | 'light'>('light');
+  // Read initial theme from cookie if available
+  function getInitialBg() {
+    if (typeof document !== 'undefined') {
+      const match = document.cookie.match(/(?:^|; )artmoments_theme=([^;]*)/);
+      if (match && (match[1] === 'dark' || match[1] === 'light')) {
+        return match[1] as 'dark' | 'light';
+      }
+    }
+    return 'light';
+  }
+  const [bg, setBg] = useState<'dark' | 'light'>(getInitialBg);
   const [categories, setCategories] = useState<{ key: string; name: string; link: string; exposed: boolean }[]>([]);
 
   const toggleBg = () => {
-    setBg(bg === 'dark' ? 'light' : 'dark');
+    const newBg = bg === 'dark' ? 'light' : 'dark';
+    setBg(newBg);
     if (typeof document !== 'undefined') {
-      document.body.classList.toggle('dark', bg !== 'dark');
-      document.body.classList.toggle('light', bg === 'dark');
+      document.body.classList.toggle('dark', newBg === 'dark');
+      document.body.classList.toggle('light', newBg === 'light');
+      // Persist preference in cookie for 1 year
+      document.cookie = `artmoments_theme=${newBg}; path=/; max-age=31536000; SameSite=Lax`;
     }
   };
 
@@ -27,6 +40,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     if (typeof document !== 'undefined') {
       document.body.classList.toggle('dark', bg === 'dark');
       document.body.classList.toggle('light', bg === 'light');
+      // Persist preference in cookie for 1 year
+      document.cookie = `artmoments_theme=${bg}; path=/; max-age=31536000; SameSite=Lax`;
     }
   }, [bg]);
 

@@ -11,8 +11,9 @@ interface GalleryCategoryClientProps {
 }
 
 export default function GalleryCategoryClient({ images, cat }: GalleryCategoryClientProps) {
-  const { bg } = useBg();
+  const { bg, toggleBg } = useBg();
   const isDark = bg === 'dark';
+  const [search, setSearch] = useState('');
   return (
     <main style={{ padding: '2rem', background: isDark ? '#111' : undefined }}>
       <div style={{

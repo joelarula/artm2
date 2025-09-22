@@ -87,9 +87,9 @@ export default function SearchPage() {
                   <div
                     style={{
                       display: "grid",
-                      gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
                       gap: "2rem",
                     }}
+                    className="gallery-grid"
                   >
                     {filtered.map((img) => {
                       let catLink = 'uncategorized';

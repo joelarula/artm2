@@ -94,19 +94,21 @@ export default function Lightbox({ src, alt, onClose, prev, next, current }: {
             onClick={e => { e.stopPropagation(); handleNav(prev.href + (prev.href.includes('?') ? '&' : '?') + 'lightbox=1'); }}
             style={{
               pointerEvents: 'auto',
-              marginLeft: 16,
-              background: 'rgba(0,0,0,0.5)',
-              color: '#fff',
-              borderRadius: 10,
-              fontSize: '2.2rem',
-              fontWeight: 700,
-              padding: '0.2rem 1.1rem',
+              marginLeft: 12,
+              background: 'rgba(255,255,255,0.13)',
+              color: '#eee',
+              borderRadius: 8,
+              fontSize: '1.4rem',
+              fontWeight: 500,
+              padding: '0.1rem 0.7rem',
               textDecoration: 'none',
               display: 'flex',
               alignItems: 'center',
               transition: 'background 0.15s',
               border: 'none',
               cursor: 'pointer',
+              boxShadow: 'none',
+              opacity: 0.7,
             }}
             aria-label={`Previous: ${prev.name}`}
           >
@@ -119,19 +121,21 @@ export default function Lightbox({ src, alt, onClose, prev, next, current }: {
             onClick={e => { e.stopPropagation(); handleNav(next.href + (next.href.includes('?') ? '&' : '?') + 'lightbox=1'); }}
             style={{
               pointerEvents: 'auto',
-              marginRight: 16,
-              background: 'rgba(0,0,0,0.5)',
-              color: '#fff',
-              borderRadius: 10,
-              fontSize: '2.2rem',
-              fontWeight: 700,
-              padding: '0.2rem 1.1rem',
+              marginRight: 12,
+              background: 'rgba(255,255,255,0.13)',
+              color: '#eee',
+              borderRadius: 8,
+              fontSize: '1.4rem',
+              fontWeight: 500,
+              padding: '0.1rem 0.7rem',
               textDecoration: 'none',
               display: 'flex',
               alignItems: 'center',
               transition: 'background 0.15s',
               border: 'none',
               cursor: 'pointer',
+              boxShadow: 'none',
+              opacity: 0.7,
             }}
             aria-label={`Next: ${next.name}`}
           >

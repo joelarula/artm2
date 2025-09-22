@@ -148,26 +148,29 @@ export default async function PaintingDetailPage(props: { params: { category: st
               href={`/painting/${category}/${prevPainting.slug}`}
               style={{
                 textDecoration: 'none',
-                color: 'var(--foreground)',
+                color: '#e0e0e0',
                 fontWeight: 600,
-                fontSize: '1.7rem',
-                width: 54,
-                height: 54,
-                borderRadius: 14,
-                background: '#e5e5e7',
-                boxShadow: '0 2px 8px #0001',
+                fontSize: '1.55rem',
+                borderRadius: 10,
+                background: 'rgba(255,255,255,0.22)',
                 opacity: 0.92,
                 position: 'relative',
                 transition: 'background 0.18s',
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                overflow: 'visible',
-                border: '2px solid #c2c2c7',
+                padding: '0.18rem 1.1rem',
+                marginLeft: 10,
+                boxShadow: '0 2px 8px #0001',
+                border: 'none',
+                width: 'auto',
+                height: 'auto',
+                cursor: 'pointer',
+                letterSpacing: 0.1,
               }}
               aria-label={`Previous: ${prevPainting.name}`}
             >
-              <span aria-hidden="true" style={{fontSize:'2.2rem',lineHeight:1, fontWeight:700, fontFamily:'inherit'}}>&lt;</span>
+              <span aria-hidden="true" style={{fontSize:'1.55rem',lineHeight:1, fontWeight:600, fontFamily:'inherit'}}>&lt;</span>
               <span
                 style={{
                   position: 'absolute',
@@ -176,11 +179,11 @@ export default async function PaintingDetailPage(props: { params: { category: st
                   transform: 'translateY(-50%)',
                   background: 'var(--background)',
                   color: 'var(--foreground)',
-                  padding: '0.3rem 0.8rem',
+                  padding: '0.22rem 0.9rem',
                   borderRadius: 6,
                   boxShadow: '0 2px 8px #0002',
-                  fontSize: '1rem',
-                  fontWeight: 500,
+                  fontSize: '1.05rem',
+                  fontWeight: 400,
                   opacity: 0,
                   pointerEvents: 'none',
                   whiteSpace: 'nowrap',
@@ -203,26 +206,29 @@ export default async function PaintingDetailPage(props: { params: { category: st
               href={`/painting/${category}/${nextPainting.slug}`}
               style={{
                 textDecoration: 'none',
-                color: 'var(--foreground)',
+                color: '#e0e0e0',
                 fontWeight: 600,
-                fontSize: '1.7rem',
-                width: 54,
-                height: 54,
-                borderRadius: 14,
-                background: '#e5e5e7',
-                boxShadow: '0 2px 8px #0001',
+                fontSize: '1.55rem',
+                borderRadius: 10,
+                background: 'rgba(255,255,255,0.22)',
                 opacity: 0.92,
                 position: 'relative',
                 transition: 'background 0.18s',
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                overflow: 'visible',
-                border: '2px solid #c2c2c7',
+                padding: '0.18rem 1.1rem',
+                marginRight: 10,
+                boxShadow: '0 2px 8px #0001',
+                border: 'none',
+                width: 'auto',
+                height: 'auto',
+                cursor: 'pointer',
+                letterSpacing: 0.1,
               }}
               aria-label={`Next: ${nextPainting.name}`}
             >
-              <span aria-hidden="true" style={{fontSize:'2.2rem',lineHeight:1, fontWeight:700, fontFamily:'inherit'}}>&gt;</span>
+              <span aria-hidden="true" style={{fontSize:'1.55rem',lineHeight:1, fontWeight:600, fontFamily:'inherit'}}>&gt;</span>
               <span
                 style={{
                   position: 'absolute',
@@ -231,11 +237,11 @@ export default async function PaintingDetailPage(props: { params: { category: st
                   transform: 'translateY(-50%)',
                   background: 'var(--background)',
                   color: 'var(--foreground)',
-                  padding: '0.3rem 0.8rem',
+                  padding: '0.22rem 0.9rem',
                   borderRadius: 6,
                   boxShadow: '0 2px 8px #0002',
-                  fontSize: '1rem',
-                  fontWeight: 500,
+                  fontSize: '1.05rem',
+                  fontWeight: 400,
                   opacity: 0,
                   pointerEvents: 'none',
                   whiteSpace: 'nowrap',
