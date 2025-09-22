@@ -175,25 +175,32 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 transition: 'background 0.15s',
               }}
             >
-              <span style={{ opacity: 0.85 }}>otsi maale  ...</span>
+              <span style={{ opacity: 0.85 }}>otsi maali</span>
             </Link>
           )}
           <button
             onClick={toggleBg}
             style={{
-              background: bg === 'dark' ? '#222' : '#fff',
-              color: bg === 'dark' ? '#fff' : '#222',
-              border: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '2rem',
+              padding: '0 1.1rem',
               borderRadius: 6,
-              padding: '0.25rem 0.8rem',
-              cursor: 'pointer',
+              border: 'none',
+              background: bg === 'dark' ? '#222' : '#f0f0f0',
+              color: bg === 'dark' ? '#fff' : '#222',
               fontWeight: 500,
-              fontSize: '0.95rem',
-              boxShadow: bg === 'dark' ? '0 2px 8px #0006' : '0 2px 8px #0002',
+              fontSize: '0.97rem',
+              boxShadow: bg === 'dark' ? '0 1px 4px #0006' : '0 1px 4px #0001',
+              textDecoration: 'none',
+              cursor: 'pointer',
+              marginRight: 0,
+              transition: 'background 0.15s',
             }}
             aria-label="Switch dark/light mode"
           >
-            {bg === 'dark' ? 'Hele taust' : 'Tume taust'}
+            <span style={{ opacity: 0.85 }}>{bg === 'dark' ? 'helenda' : 'tumenda'}</span>
           </button>
         </nav>
         <header style={{
@@ -215,8 +222,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             margin: 0,
             minHeight: 0,
           }}>
-            {/* Removed extra dark/light button from header */}
-            {/* Image logo removed as requested */}
+            {/* Logo and site title */}
             <div
               style={{
                 width: '100%',
@@ -231,67 +237,79 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                   textDecoration: 'none',
                   color: 'inherit',
                   cursor: 'pointer',
+                  display: 'inline-block',
                 }}
-                aria-label="Artmoments homepage"
+                aria-label="Artmoments koduleht"
               >
                 <span
                   style={{
                     fontSize: '2.5rem',
-                    fontWeight: 800,
-                    letterSpacing: 1,
+                    fontWeight: 300,
+                    letterSpacing: 6,
                     color: 'var(--foreground)',
-                    fontFamily: 'var(--font-geist-sans), Arial, Helvetica, sans-serif',
+                    fontFamily: 'var(--font-geist-sans), Roboto, Arial, Helvetica, sans-serif, \"Pacifico\", \"Comic Sans MS\", cursive',
                     lineHeight: 1.1,
                     display: 'inline-block',
                     userSelect: 'none',
+                    textTransform: 'uppercase',
                   }}
                 >
                   artmoments
                 </span>
+                <div
+                  style={{
+                    fontSize: '1.18rem',
+                    fontWeight: 400,
+                    color: 'var(--muted, #888)',
+                    marginTop: 6,
+                    letterSpacing: 0.1,
+                    fontFamily: 'Roboto, Arial, Helvetica, sans-serif',
+                  }}
+                >
+                  akrüülmaalid lõuendil
+                </div>
               </a>
             </div>
           </div>
-          {/* Hide main menu on front page ("/") */}
-          {pathname !== "/" && (
-            <nav style={{ width: '100%', display: 'flex', justifyContent: 'center', margin: 0, marginTop: '-0.5rem' }}>
-              {categories.length === 0 ? (
-                <div style={{ color: 'var(--muted)', fontSize: '1.1rem', padding: '0.7rem 0' }}>
-                  Loading galleries...
-                </div>
-              ) : (
-                <ul style={{ display: 'flex', flexWrap: 'wrap', gap: '1.2rem', listStyle: 'none', padding: 0, margin: 0 }}>
-                  {categories.map((cat) => {
-                    const isActive = cat.link === activeCategoryLink;
-                    return (
-                      <li key={cat.key}>
-                        <Link
-                          href={`/paintings/${cat.link}`}
-                          style={{
-                            textDecoration: 'none',
-                            color: isActive ? 'var(--foreground)' : 'inherit',
-                            fontWeight: isActive ? 700 : 500,
-                            padding: isActive ? '0.3rem 1.1rem' : '0.3rem 1rem',
-                            borderRadius: 8,
-                            transition: 'all 0.18s',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            verticalAlign: 'middle',
-                            background: undefined,
-                            boxShadow: undefined,
-                            fontSize: isActive ? '1.13rem' : '1rem',
-                            transform: isActive ? 'scale(1.08)' : 'none',
-                            zIndex: isActive ? 1 : undefined,
-                          }}
-                        >
-                          {cat.name}
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-            </nav>
-          )}
+          {/* Show main menu on all pages */}
+          <nav style={{ width: '100%', display: 'flex', justifyContent: 'center', margin: 0, marginTop: '-0.5rem' }}>
+            {categories.length === 0 ? (
+              <div style={{ color: 'var(--muted)', fontSize: '1.1rem', padding: '0.7rem 0' }}>
+                Loading galleries...
+              </div>
+            ) : (
+              <ul style={{ display: 'flex', flexWrap: 'wrap', gap: '1.2rem', listStyle: 'none', padding: 0, margin: 0 }}>
+                {categories.map((cat) => {
+                  const isActive = cat.link === activeCategoryLink;
+                  return (
+                    <li key={cat.key}>
+                      <Link
+                        href={`/paintings/${cat.link}`}
+                        style={{
+                          textDecoration: 'none',
+                          color: isActive ? 'var(--foreground)' : 'inherit',
+                          fontWeight: isActive ? 700 : 500,
+                          padding: isActive ? '0.3rem 1.1rem' : '0.3rem 1rem',
+                          borderRadius: 8,
+                          transition: 'all 0.18s',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          verticalAlign: 'middle',
+                          background: undefined,
+                          boxShadow: undefined,
+                          fontSize: isActive ? '1.13rem' : '1rem',
+                          transform: isActive ? 'scale(1.08)' : 'none',
+                          zIndex: isActive ? 1 : undefined,
+                        }}
+                      >
+                        {cat.name}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </nav>
           {/* Dark/Light button moved to top left */}
         </header>
         <main style={{ minHeight: '80vh', padding: 0 }}>{children}</main>
