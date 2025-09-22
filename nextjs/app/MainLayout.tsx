@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, createContext, useContext } from 'react';
+import React, { useState, useEffect, createContext, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -23,20 +23,31 @@ export function useBg() {
   return useContext(MainLayoutContext);
 }
 
+// Add Roboto font globally by injecting a link tag in the document head
+if (typeof document !== 'undefined' && !document.getElementById('roboto-font')) {
+  const link = document.createElement('link');
+  link.id = 'roboto-font';
+  link.rel = 'stylesheet';
+  link.href = 'https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap';
+  document.head.appendChild(link);
+}
+
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const [search, setSearch] = useState('');
   const router = useRouter();
   // Read initial theme from cookie if available
-  function getInitialBg() {
+  // Always default to 'light' for SSR, update from cookie on client
+  const [bg, setBg] = useState<'dark' | 'light'>('light');
+
+  // On mount, update bg from cookie if present
+  useEffect(() => {
     if (typeof document !== 'undefined') {
       const match = document.cookie.match(/(?:^|; )artmoments_theme=([^;]*)/);
       if (match && (match[1] === 'dark' || match[1] === 'light')) {
-        return match[1] as 'dark' | 'light';
+        setBg(match[1] as 'dark' | 'light');
       }
     }
-    return 'light';
-  }
-  const [bg, setBg] = useState<'dark' | 'light'>(getInitialBg);
+  }, []);
   const [categories, setCategories] = useState<{ key: string; name: string; link: string; exposed: boolean }[]>([]);
   const [catalog, setCatalog] = useState<CatalogType | null>(null);
 
@@ -112,7 +123,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <MainLayoutContext.Provider value={{ bg, toggleBg, catalog }}>
-      <div>
+  <div style={{ fontFamily: 'Roboto, Arial, Helvetica, sans-serif' }}>
         {/* Top Menu with search and dark/light toggle */}
         <nav style={{
           width: '100%',
@@ -152,7 +163,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 transition: 'background 0.15s',
               }}
             >
-              <span style={{ opacity: 0.85 }}>Search paintings ...</span>
+              <span style={{ opacity: 0.85 }}>otsi maale  ...</span>
             </Link>
           )}
           <button
@@ -170,16 +181,17 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             }}
             aria-label="Switch dark/light mode"
           >
-            {bg === 'dark' ? 'Light' : 'Dark'}
+            {bg === 'dark' ? 'Hele taust' : 'Tume taust'}
           </button>
         </nav>
         <header style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          padding: '2.5rem 0 2.2rem 0',
+          padding: '1.1rem 0 1.2rem 0',
           background: 'var(--background)',
           position: 'relative',
+          fontFamily: 'Roboto, Arial, Helvetica, sans-serif',
         }}>
           <div style={{
             position: 'relative',
@@ -197,8 +209,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
               style={{
                 width: '100%',
                 textAlign: 'center',
-                marginTop: '0.5rem',
-                marginBottom: '2.2rem',
+                marginTop: '0',
+                marginBottom: '40px',
               }}
             >
               <span

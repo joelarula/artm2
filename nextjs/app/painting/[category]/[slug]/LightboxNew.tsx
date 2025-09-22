@@ -7,6 +7,7 @@ type NavItem = { href: string; name: string; slug: string };
 interface LightboxProps {
   src: string;
   alt: string;
+  title?: string;
   onClose: () => void;
   prev?: NavItem;
   next?: NavItem;
@@ -14,7 +15,7 @@ interface LightboxProps {
   loading?: boolean;
 }
 
-const Lightbox: React.FC<LightboxProps> = ({ src, alt, onClose, prev, next, onNav, loading }) => {
+const Lightbox: React.FC<LightboxProps> = ({ src, alt, title, onClose, prev, next, onNav, loading }) => {
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
@@ -72,19 +73,51 @@ const Lightbox: React.FC<LightboxProps> = ({ src, alt, onClose, prev, next, onNa
             Loading…
           </div>
         ) : (
-          <img
-            src={src}
-            alt={alt}
-            style={{
-              maxWidth: "98vw",
-              maxHeight: "96vh",
-              boxShadow: "0 4px 32px #000a",
-              borderRadius: 12,
-              background: "#222",
-              objectFit: "contain",
-            }}
-            onClick={e => e.stopPropagation()}
-          />
+          <div style={{ position: 'relative', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <img
+              src={src}
+              alt={alt}
+              style={{
+                maxWidth: "98vw",
+                maxHeight: "88vh",
+                boxShadow: "0 4px 32px #000a",
+                borderRadius: 12,
+                background: "#222",
+                objectFit: "contain",
+                display: 'block',
+                marginTop: 28, // add top margin
+                marginBottom: 70, // more space for title overlay
+              }}
+              onClick={e => e.stopPropagation()}
+            />
+            {/* Painting title over the image, just above the bottom edge */}
+            {title && (
+              <div
+                style={{
+                  position: 'absolute',
+                  left: '50%',
+                  bottom: 38, // more space between image and title
+                  transform: 'translateX(-50%)',
+                  color: '#fff',
+                  fontSize: '1.25rem',
+                  fontWeight: 400,
+                  textShadow: '0 2px 12px #000a',
+                  background: 'rgba(0,0,0,0.32)',
+                  borderRadius: 8,
+                  padding: '0.25em 1.2em',
+                  maxWidth: '80vw',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  textAlign: 'center',
+                  display: 'inline-block',
+                  pointerEvents: 'auto',
+                }}
+              >
+                {title}
+              </div>
+            )}
+          </div>
         )}
       </div>
       <button
