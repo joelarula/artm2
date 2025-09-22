@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, { useState } from 'react';
 import { useBg } from '../../MainLayout';
 import Link from 'next/link';
 import type { Category } from '../../../lib/categoryData';
@@ -62,7 +62,7 @@ export default function GalleryCategoryClient({ images, cat }: GalleryCategoryCl
                 </h2>
                   {img.author && (
                     <div style={{ color: isDark ? '#aaa' : '#888', fontSize: '0.9rem', marginBottom: 4 }}>
-                      {typeof img.author === 'string' ? img.author : (img.author && typeof img.author === 'object' && 'name' in img.author ? img.author.name : '')}
+                      {img.author}
                     </div>
                   )}
               </div>

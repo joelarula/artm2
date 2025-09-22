@@ -1,3 +1,4 @@
+import PaintingDetailClient from './PaintingDetailClient';
 import { fetchAllImageMeta, ImageMeta } from '../../../../lib/imageData';
 import { fetchCategories } from '../../../../lib/categoryData';
 import { notFound } from 'next/navigation';
@@ -24,6 +25,8 @@ export async function generateStaticParams() {
   console.log('Static params for painting detail:', params);
   return params;
 }
+
+
 
 
 export default async function PaintingDetailPage(props: { params: { category: string; slug: string } }) {
@@ -94,38 +97,38 @@ export default async function PaintingDetailPage(props: { params: { category: st
         position: 'relative',
       }}
     >
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <img
-          src={`/gallery/data/catalog/original/${img.key}.png`}
-          alt={img.name}
-          style={{ maxWidth: '100%', maxHeight: 600, borderRadius: 12, boxShadow: '0 2px 16px #0002', marginBottom: 24 }}
-        />
-        <h1
-          style={{
-            textAlign: 'center',
-            margin: '0 0 0.5rem 0',
-            color: 'var(--foreground)',
-            textShadow: '0 2px 12px #0006',
-            transition: 'color 0.3s',
-            fontSize: '2.1rem',
-            fontWeight: 700,
-            letterSpacing: 0.2,
-          }}
-        >
-          {img.name}
-        </h1>
-        <div style={{
-          color: 'var(--foreground)',
-          fontSize: '1.08rem',
-          marginBottom: 16,
-          opacity: 0.82,
+      {/* Client image/lightbox */}
+      <PaintingDetailClient
+        img={img}
+        prev={prevPainting ? { href: `/painting/${category}/${prevPainting.slug}`, name: prevPainting.name } : undefined}
+        next={nextPainting ? { href: `/painting/${category}/${nextPainting.slug}`, name: nextPainting.name } : undefined}
+        current={{ href: `/painting/${category}/${img.slug}`, name: img.name }}
+      />
+      <h1
+        style={{
           textAlign: 'center',
-          fontWeight: 500,
-          letterSpacing: 0.1,
-        }}>{author} &middot; {categoryName}</div>
-        <div style={{ width: '100%' }}>
-          {img.description && <p style={{ margin: 0, color: 'var(--foreground)', opacity: 0.8 }}>{img.description}</p>}
-        </div>
+          margin: '0 0 0.5rem 0',
+          color: 'var(--foreground)',
+          textShadow: '0 2px 12px #0006',
+          transition: 'color 0.3s',
+          fontSize: '2.1rem',
+          fontWeight: 700,
+          letterSpacing: 0.2,
+        }}
+      >
+        {img.name}
+      </h1>
+      <div style={{
+        color: 'var(--foreground)',
+        fontSize: '1.08rem',
+        marginBottom: 16,
+        opacity: 0.82,
+        textAlign: 'center',
+        fontWeight: 500,
+        letterSpacing: 0.1,
+      }}>{author} &middot; {categoryName}</div>
+      <div style={{ width: '100%' }}>
+        {img.description && <p style={{ margin: 0, color: 'var(--foreground)', opacity: 0.8 }}>{img.description}</p>}
       </div>
       {/* Navigation links */}
       <div style={{

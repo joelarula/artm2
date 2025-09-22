@@ -1,17 +1,17 @@
 "use client";
 import React, { useState, createContext, useContext } from 'react';
+import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-
-
-
-const BgContext = createContext({ bg: 'white', toggleBg: () => {} });
+const BgContext = createContext<{ bg: 'dark' | 'light'; toggleBg: () => void }>({ bg: 'light', toggleBg: () => {} });
 
 export function useBg() {
   return useContext(BgContext);
 }
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
+  const [search, setSearch] = useState('');
+  const router = useRouter();
   const [bg, setBg] = useState<'dark' | 'light'>('light');
   const [categories, setCategories] = useState<{ key: string; name: string; link: string; exposed: boolean }[]>([]);
 
@@ -58,6 +58,9 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   const pathname = usePathname();
   // Determine active category for both gallery and detail views
   let activeCategoryLink = '';
+  const isSearchPage = pathname === '/search'; // Check if on search page
+
+
   if (pathname.startsWith('/paintings/')) {
     // /paintings/[category]
     const match = pathname.match(/^\/paintings\/([^\/]+)/);
@@ -71,6 +74,66 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   return (
     <BgContext.Provider value={{ bg, toggleBg }}>
       <div>
+        {/* Top Menu with search and dark/light toggle */}
+        <nav style={{
+          width: '100%',
+          height: '2.5rem',
+          marginBottom: '1.5rem',
+          /* background removed */
+          /* borderRadius and boxShadow removed for no border */
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          padding: '0 1rem',
+          gap: '0.7rem',
+          position: 'sticky',
+          top: 0,
+          zIndex: 100,
+          backdropFilter: 'blur(4px)',
+        }}>
+          {!isSearchPage && ( // Only show the link if not on the search page
+            <Link
+              href="/search"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '2rem',
+                padding: '0 1.1rem',
+                borderRadius: 6,
+                border: 'none',
+                background: bg === 'dark' ? '#222' : '#f0f0f0',
+                color: bg === 'dark' ? '#fff' : '#222',
+                fontWeight: 500,
+                fontSize: '0.97rem',
+                boxShadow: bg === 'dark' ? '0 1px 4px #0006' : '0 1px 4px #0001',
+                textDecoration: 'none',
+                cursor: 'pointer',
+                marginRight: '0.5rem',
+                transition: 'background 0.15s',
+              }}
+            >
+              <span style={{ opacity: 0.85 }}>Search paintings ...</span>
+            </Link>
+          )}
+          <button
+            onClick={toggleBg}
+            style={{
+              background: bg === 'dark' ? '#222' : '#fff',
+              color: bg === 'dark' ? '#fff' : '#222',
+              border: 'none',
+              borderRadius: 6,
+              padding: '0.25rem 0.8rem',
+              cursor: 'pointer',
+              fontWeight: 500,
+              fontSize: '0.95rem',
+              boxShadow: bg === 'dark' ? '0 2px 8px #0006' : '0 2px 8px #0002',
+            }}
+            aria-label="Switch dark/light mode"
+          >
+            {bg === 'dark' ? 'Light' : 'Dark'}
+          </button>
+        </nav>
         <header style={{
           display: 'flex',
           flexDirection: 'column',
@@ -89,29 +152,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             margin: 0,
             minHeight: 0,
           }}>
-            <button
-              onClick={toggleBg}
-              style={{
-                position: 'absolute',
-                top: 0,
-                right: 0,
-                background: 'var(--foreground)',
-                color: 'var(--background)',
-                border: 'none',
-                borderRadius: 6,
-                padding: '0.35rem 1.1rem',
-                cursor: 'pointer',
-                fontWeight: 600,
-                fontSize: '1rem',
-                boxShadow: '0 2px 8px #0002',
-                zIndex: 10,
-                margin: 0,
-                alignSelf: 'flex-start',
-              }}
-              aria-label="Switch dark/light mode"
-            >
-              {bg === 'dark' ? 'Light' : 'Dark'}
-            </button>
+            {/* Removed extra dark/light button from header */}
             {/* Image logo removed as requested */}
             <div
               style={{
