@@ -23,8 +23,33 @@ function readJsonFiles(dir) {
 const categories = readJsonFiles(categoriesDir);
 // 2. Collect all authors
 const authors = readJsonFiles(authorsDir);
+// Build a map from author key to author name
+const authorKeyToName = {};
+authors.forEach(author => {
+  if (author.key && author.name) {
+    authorKeyToName[author.key.trim().toUpperCase()] = author.name;
+  }
+  if (author.link && author.name) {
+    authorKeyToName[author.link.trim().toLowerCase()] = author.name;
+  }
+});
 // 3. Parse all paintings
 const paintings = readJsonFiles(paintingsDir);
+// Replace author field with author name
+paintings.forEach(painting => {
+  if (painting.author) {
+    let authorKey = painting.author;
+    if (typeof authorKey === 'object' && authorKey.key) {
+      authorKey = authorKey.key;
+    }
+    if (typeof authorKey === 'string') {
+      let name = authorKeyToName[authorKey.trim().toUpperCase()] || authorKeyToName[authorKey.trim().toLowerCase()];
+      if (name) {
+        painting.author = name;
+      }
+    }
+  }
+});
 
 // 4. Add paintings under matching categories
 const catalog = {};
