@@ -3,7 +3,10 @@ import React, { useState } from 'react';
 import { useBg } from '../../MainLayout';
 import Link from 'next/link';
 import type { Category } from '../../../lib/categoryData';
-import type { ImageMeta } from '../../../lib/imageData';
+// Extend ImageMeta to include link property for painting navigation
+import type { ImageMeta as BaseImageMeta } from '../../../lib/imageData';
+
+type ImageMeta = BaseImageMeta & { link: string };
 
 interface GalleryCategoryClientProps {
   images: ImageMeta[];
@@ -23,7 +26,7 @@ export default function GalleryCategoryClient({ images, cat }: GalleryCategoryCl
       }}>
         {images.length === 0 && <div style={{gridColumn: '1/-1', textAlign: 'center', color: isDark ? '#aaa' : '#888'}}>No images in this category.</div>}
         {images.map((img: ImageMeta) => (
-          <Link key={img.key} href={`/painting/${cat.link}/${img.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Link key={img.key} href={`/painting/${cat.link}/${img.link}`} style={{ textDecoration: 'none', color: 'inherit' }}>
             <div
               style={{
                 border: isDark ? '1px solid #222' : '1px solid #eee',
@@ -35,18 +38,18 @@ export default function GalleryCategoryClient({ images, cat }: GalleryCategoryCl
                 cursor: 'pointer',
               }}
             >
-              <img
-                src={`/gallery/data/catalog/original/${img.key}.png`}
-                alt={img.name}
-                style={{
-                  width: '100%',
-                  height: 180,
-                  objectFit: 'cover',
-                  display: 'block',
-                  background: isDark ? '#222' : '#f8f8f8',
-                  filter: isDark ? 'brightness(0.92) contrast(1.08)' : undefined,
-                }}
-              />
+                <img
+                  src={img.photo.startsWith('/') ? img.photo : `/db/photos/${img.photo}`}
+                  alt={img.name}
+                  style={{
+                    width: '100%',
+                    height: 180,
+                    objectFit: 'cover',
+                    display: 'block',
+                    background: isDark ? '#222' : '#f8f8f8',
+                    filter: isDark ? 'brightness(0.92) contrast(1.08)' : undefined,
+                  }}
+                />
               <div style={{ padding: '1rem' }}>
                 <h2
                   style={{

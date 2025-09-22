@@ -3,10 +3,24 @@ import React, { useState, createContext, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-const BgContext = createContext<{ bg: 'dark' | 'light'; toggleBg: () => void }>({ bg: 'light', toggleBg: () => {} });
+
+type CatalogType = Record<string, any>;
+interface MainLayoutContextType {
+  bg: 'dark' | 'light';
+  toggleBg: () => void;
+  catalog: CatalogType | null;
+}
+const MainLayoutContext = createContext<MainLayoutContextType>({ bg: 'light', toggleBg: () => {}, catalog: null });
+export function useMainLayout() {
+  return useContext(MainLayoutContext);
+}
+// For backwards compatibility
+const BgContext = {
+  Provider: MainLayoutContext.Provider,
+};
 
 export function useBg() {
-  return useContext(BgContext);
+  return useContext(MainLayoutContext);
 }
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
@@ -24,6 +38,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   }
   const [bg, setBg] = useState<'dark' | 'light'>(getInitialBg);
   const [categories, setCategories] = useState<{ key: string; name: string; link: string; exposed: boolean }[]>([]);
+  const [catalog, setCatalog] = useState<CatalogType | null>(null);
 
   const toggleBg = () => {
     const newBg = bg === 'dark' ? 'light' : 'dark';
@@ -45,28 +60,37 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     }
   }, [bg]);
 
+  // Always fetch menu.json first, then catalog.json
   React.useEffect(() => {
-    fetch('/gallery/data/db.json')
-      .then(res => {
-        if (!res.ok) {
-          console.error('Failed to fetch /gallery/data/db.json:', res.status, res.statusText);
-          return null;
-        }
-        return res.json();
-      })
+  fetch('/db/menu.json')
+      .then(res => res.ok ? res.json() : null)
       .then(data => {
-        if (data && data.categories) {
-          const cats = Object.entries(data.categories)
-            .map(([key, value]: [string, any]) => ({ key, ...value }))
-            .filter(cat => cat.exposed);
+        if (data && typeof data === 'object') {
+          const cats = Object.entries(data)
+            .map(([link, value]: [string, any]) => ({ key: value.key || link, link, ...value }))
+            .filter(cat => cat.exposed || cat.published);
           setCategories(cats);
           console.log('Loaded categories:', cats);
         } else {
-          console.error('No categories found in db.json', data);
+          setCategories([]);
+          console.error('No categories found in menu.json', data);
+        }
+        // After menu.json, load catalog.json
+  return fetch('/db/catalog.json');
+      })
+      .then(res => (res && res.ok ? res.json() : null))
+      .then(data => {
+        if (data && typeof data === 'object') {
+          setCatalog(data);
+        } else {
+          setCatalog(null);
+          console.error('No catalog data found in catalog.json', data);
         }
       })
       .catch(err => {
-        console.error('Error fetching /gallery/data/db.json:', err);
+        setCategories([]);
+        setCatalog(null);
+        console.error('Error fetching menu.json or catalog.json:', err);
       });
   }, []);
 
@@ -87,7 +111,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   }
 
   return (
-    <BgContext.Provider value={{ bg, toggleBg }}>
+    <MainLayoutContext.Provider value={{ bg, toggleBg, catalog }}>
       <div>
         {/* Top Menu with search and dark/light toggle */}
         <nav style={{
@@ -235,6 +259,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         </header>
         <main style={{ minHeight: '80vh', padding: 0 }}>{children}</main>
       </div>
-    </BgContext.Provider>
+  </MainLayoutContext.Provider>
   );
 }

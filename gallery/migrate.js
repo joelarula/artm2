@@ -4,6 +4,7 @@ const path = require('path');
 
 const dir = path.join(__dirname, 'source', 'data', 'db');
 const outputDir = path.join(__dirname, 'data', 'db', 'paintings');
+const imageDir = path.join(__dirname, 'source', 'data','catalog', 'original');
 let count = 0;
 let linkSet = new Set();
 let duplicates = [];
@@ -36,10 +37,25 @@ fs.readdir(dir, (err, files) => {
             linkCount[link] = 1;
             var published = data.published;
           }
+          // Determine extension by checking for [key].png in imageDir
+          let extension = null;
+          const possibleExts = ['png', 'jpg', 'jpeg', 'webp'];
+          for (const ext of possibleExts) {
+            const imgPath = path.join(imageDir, `${data.key}.${ext}`);
+            if (fs.existsSync(imgPath)) {
+              extension = ext;
+              break;
+            }
+          }
+          let photoFile = data.photo;
+          if (extension) {
+            // Always use the found extension, regardless of original photo extension
+            photoFile = `${link}.${extension}`;
+          }
           const filtered = {
             key: data.key,
             name: data.name,
-            photo: data.photo,
+            photo: photoFile,
             author: data.author,
             category: Array.isArray(data.category) ? data.category : [data.category],
             published: published,

@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
+
 const nextConfig: NextConfig = {
-  output: 'export', // Enables static site generation
+  // output: 'export', // Removed to allow dynamic routes at runtime
 };
 
 export default nextConfig;

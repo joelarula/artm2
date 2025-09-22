@@ -25,22 +25,28 @@ fs.readdir(jsonDir, (err, files) => {
       try {
         const data = JSON.parse(content);
         console.log('Name:', data.name);
-        const imgFile = path.join(imgDir, data.key + '.png');
-        // Determine extension from photo field if possible
-        let ext = 'png';
-        if (typeof data.photo === 'string' && data.photo.includes('.')) {
-          ext = data.photo.split('.').pop();
+        // Determine extension by checking for actual file in imgDir
+        const possibleExts = ['png', 'jpg', 'jpeg', 'webp'];
+        let foundImgFile = null;
+        let ext = null;
+        for (const e of possibleExts) {
+          const candidate = path.join(imgDir, data.key + '.' + e);
+          if (fs.existsSync(candidate)) {
+            foundImgFile = candidate;
+            ext = e;
+            break;
+          }
         }
         // Generate link (should match your migrate.js logic)
         let link = typeof data.name === 'string' ? data.name.replace(/\s+/g, '-').toLowerCase() : '';
-        const newFileName = link + '.' + ext;
-        const destFile = path.join(photosDir, newFileName);
-        if (fs.existsSync(imgFile)) {
-          console.log('  Image exists:', imgFile);
+        if (ext) {
+          const newFileName = link + '.' + ext;
+          const destFile = path.join(photosDir, newFileName);
+          console.log('  Image exists:', foundImgFile);
           found++;
-          fs.copyFileSync(imgFile, destFile);
+          fs.copyFileSync(foundImgFile, destFile);
         } else {
-          console.log('  Image missing:', imgFile);
+          console.log('  Image missing for key:', data.key);
           missing++;
           missingNames.push(data.name);
         }
