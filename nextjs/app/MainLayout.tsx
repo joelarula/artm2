@@ -158,31 +158,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           zIndex: 100,
           backdropFilter: 'blur(4px)',
         }}>
-          {!isSearchPage && ( // Only show the link if not on the search page
-            <Link
-              href="/search"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: '2rem',
-                padding: '0 1.1rem',
-                borderRadius: 6,
-                border: 'none',
-                background: bg === 'dark' ? '#222' : '#f0f0f0',
-                color: bg === 'dark' ? '#fff' : '#222',
-                fontWeight: 500,
-                fontSize: '0.97rem',
-                boxShadow: bg === 'dark' ? '0 1px 4px #0006' : '0 1px 4px #0001',
-                textDecoration: 'none',
-                cursor: 'pointer',
-                marginRight: '0.5rem',
-                transition: 'background 0.15s',
-              }}
-            >
-              <span style={{ opacity: 0.85 }}>otsi maali</span>
-            </Link>
-          )}
+          {/* 'otsi maali' link moved to main menu below */}
           <button
             onClick={toggleBg}
             style={{
@@ -298,7 +274,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 Loading galleries...
               </div>
             ) : (
-              <ul style={{ display: 'flex', flexWrap: 'wrap', gap: '1.2rem', listStyle: 'none', padding: 0, margin: 0 }}>
+              <ul style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', listStyle: 'none', padding: 0, margin: 0 }}>
+                {/* 'otsi maali' search link as last menu item, styled like others */}
                 {categories.map((cat) => {
                   const isActive = cat.link === activeCategoryLink;
                   return (
@@ -308,7 +285,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                         style={{
                           textDecoration: 'none',
                           color: isActive ? 'var(--foreground)' : 'inherit',
-                          fontWeight: isActive ? 700 : 500,
+                          fontWeight: isActive ? 500 : 300,
                           padding: isActive ? '0.3rem 1.1rem' : '0.3rem 1rem',
                           borderRadius: 8,
                           transition: 'all 0.18s cubic-bezier(.4,1.2,.4,1)',
@@ -317,7 +294,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                           verticalAlign: 'middle',
                           background: undefined,
                           boxShadow: undefined,
-                          fontSize: isActive ? '1.13rem' : '1rem',
+                          fontSize: isActive ? '1.08rem' : '0.97rem',
                           transform: isActive ? 'scale(1.08)' : 'none',
                           zIndex: isActive ? 1 : undefined,
                         }}
@@ -337,6 +314,40 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                     </li>
                   );
                 })}
+                {/* Add 'otsi maali' as last menu item */}
+                {!isSearchPage && (
+                  <li key="otsi-maali">
+                    <Link
+                      href="/search"
+                      style={{
+                        textDecoration: 'none',
+                        color: 'inherit',
+                        fontWeight: 300,
+                        padding: '0.3rem 1rem',
+                        borderRadius: 8,
+                        transition: 'all 0.18s cubic-bezier(.4,1.2,.4,1)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        verticalAlign: 'middle',
+                        background: undefined,
+                        boxShadow: undefined,
+                        fontSize: '0.97rem',
+                      }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.transform = 'translateY(-4px)';
+                        e.currentTarget.style.boxShadow = '0 6px 18px #0002';
+                        e.currentTarget.style.border = 'none';
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.transform = 'none';
+                        e.currentTarget.style.boxShadow = '';
+                        e.currentTarget.style.border = 'none';
+                      }}
+                    >
+                      otsi maali
+                    </Link>
+                  </li>
+                )}
               </ul>
             )}
           </nav>

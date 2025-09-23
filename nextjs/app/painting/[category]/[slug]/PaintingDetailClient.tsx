@@ -80,7 +80,7 @@ export default function PaintingDetailClient({ img, prev, next, current, onNav, 
                 <img
                   src={prev.photo.startsWith('/') ? prev.photo : `/db/photos/${prev.photo}`}
                   alt={prev.name}
-                  style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 8, border: '2px solid #ccc', background: '#fff' }}
+                  style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 10, border: '2px solid #ccc', background: '#fff', opacity: 0.5 }}
                 />
               ) : (
                 <span style={{ fontSize: '2rem', color: 'var(--foreground, #222)' }}>&#60;</span>
@@ -100,11 +100,11 @@ export default function PaintingDetailClient({ img, prev, next, current, onNav, 
                 display: 'flex',
                 alignItems: 'center',
                 opacity: 0.85,
-                borderRadius: 8,
+                borderRadius: 10,
                 boxShadow: '0 1px 6px #0002',
                 transition: 'box-shadow 0.15s, opacity 0.15s',
-                minWidth: 64,
-                minHeight: 64,
+                minWidth: 80,
+                minHeight: 80,
               }}
               aria-label={`Next: ${next.name}`}
             >
