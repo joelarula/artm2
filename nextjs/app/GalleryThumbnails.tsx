@@ -48,10 +48,20 @@ export default function GalleryThumbnails() {
                 borderRadius: 8,
                 overflow: "hidden",
                 boxShadow: "0 2px 8px #0001",
-                transition: "box-shadow 0.2s",
+                transition: "box-shadow 0.2s, transform 0.18s cubic-bezier(.4,1.2,.4,1)",
                 cursor: "pointer",
                 border: "1px solid transparent",
                 width: 165,
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.transform = 'translateY(-6px)';
+                e.currentTarget.style.boxShadow = '0 8px 24px #0002';
+                e.currentTarget.style.border = '1px solid transparent';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.transform = '';
+                e.currentTarget.style.boxShadow = '0 2px 8px #0001';
+                e.currentTarget.style.border = '1px solid transparent';
               }}
             >
               <img

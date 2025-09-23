@@ -35,7 +35,7 @@ export default function SearchPage() {
           type="text"
           value={search}
           onChange={e => setSearch(e.target.value)}
-          placeholder="otsi maale nime järgi"
+          placeholder="otsi maali nime alusel"
           style={{
             width: 260,
             height: '1.7rem',

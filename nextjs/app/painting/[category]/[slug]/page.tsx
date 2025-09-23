@@ -90,9 +90,9 @@ export default function PaintingDetailPage({ params }: { params: any }) {
       <PaintingDetailClient
         img={img}
         loading={loading}
-        prev={prev && prev.link ? { href: makeHref(prev.link), name: String(prev.name), slug: String(prev.link) } : undefined}
-        next={next && next.link ? { href: makeHref(next.link), name: String(next.name), slug: String(next.link) } : undefined}
-        current={current && current.link ? { href: makeHref(current.link), name: String(current.name), slug: String(current.link) } : undefined}
+        prev={prev && prev.link ? { href: makeHref(prev.link), name: String(prev.name), slug: String(prev.link), photo: prev.photo } : undefined}
+        next={next && next.link ? { href: makeHref(next.link), name: String(next.name), slug: String(next.link), photo: next.photo } : undefined}
+        current={current && current.link ? { href: makeHref(current.link), name: String(current.name), slug: String(current.link), photo: current.photo } : undefined}
         onNav={handleNav}
       />
       {img && (

@@ -6,7 +6,7 @@ import type { ImageMeta } from '../../../../lib/imageData';
 
 const Lightbox = dynamic(() => import("./LightboxNew"), { ssr: false });
 
-type NavItem = { href: string; name: string; slug: string };
+type NavItem = { href: string; name: string; slug: string; photo?: string };
 export default function PaintingDetailClient({ img, prev, next, current, onNav, lightboxOpen, loading }: {
   img: ImageMeta;
   prev?: NavItem;
@@ -62,18 +62,29 @@ export default function PaintingDetailClient({ img, prev, next, current, onNav, 
               onClick={() => onNav && onNav(prev.slug)}
               style={{
                 background: 'transparent',
-                color: 'var(--foreground, #222)',
-                borderRadius: 4,
-                fontSize: '1.7rem',
-                padding: '0.1rem 0.7rem',
                 border: 'none',
                 cursor: 'pointer',
-                opacity: 0.7,
-                transition: 'color 0.15s, opacity 0.15s',
+                padding: 0,
+                display: 'flex',
+                alignItems: 'center',
+                opacity: 0.85,
+                borderRadius: 8,
+                boxShadow: '0 1px 6px #0002',
+                transition: 'box-shadow 0.15s, opacity 0.15s',
+                minWidth: 64,
+                minHeight: 64,
               }}
               aria-label={`Previous: ${prev.name}`}
             >
-              &#60;
+              {prev.photo ? (
+                <img
+                  src={prev.photo.startsWith('/') ? prev.photo : `/db/photos/${prev.photo}`}
+                  alt={prev.name}
+                  style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 8, border: '2px solid #ccc', background: '#fff' }}
+                />
+              ) : (
+                <span style={{ fontSize: '2rem', color: 'var(--foreground, #222)' }}>&#60;</span>
+              )}
             </button>
           )}
           <div style={{ flex: 1 }} />
@@ -83,18 +94,29 @@ export default function PaintingDetailClient({ img, prev, next, current, onNav, 
               onClick={() => onNav && onNav(next.slug)}
               style={{
                 background: 'transparent',
-                color: 'var(--foreground, #222)',
-                borderRadius: 4,
-                fontSize: '1.7rem',
-                padding: '0.1rem 0.7rem',
                 border: 'none',
                 cursor: 'pointer',
-                opacity: 0.7,
-                transition: 'color 0.15s, opacity 0.15s',
+                padding: 0,
+                display: 'flex',
+                alignItems: 'center',
+                opacity: 0.85,
+                borderRadius: 8,
+                boxShadow: '0 1px 6px #0002',
+                transition: 'box-shadow 0.15s, opacity 0.15s',
+                minWidth: 64,
+                minHeight: 64,
               }}
               aria-label={`Next: ${next.name}`}
             >
-              &#62;
+              {next.photo ? (
+                <img
+                  src={next.photo.startsWith('/') ? next.photo : `/db/photos/${next.photo}`}
+                  alt={next.name}
+                  style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 8, border: '2px solid #ccc', background: '#fff' }}
+                />
+              ) : (
+                <span style={{ fontSize: '2rem', color: 'var(--foreground, #222)' }}>&#62;</span>
+              )}
             </button>
           )}
         </div>

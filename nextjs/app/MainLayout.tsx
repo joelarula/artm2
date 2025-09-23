@@ -77,6 +77,11 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     if (typeof document !== 'undefined') {
       document.body.classList.toggle('dark', bg === 'dark');
       document.body.classList.toggle('light', bg === 'light');
+      if (bg === 'light') {
+        document.body.style.background = '#F2F2F2';
+      } else {
+        document.body.style.background = '';
+      }
       // Persist preference in cookie for 1 year
       document.cookie = `artmoments_theme=${bg}; path=/; max-age=31536000; SameSite=Lax`;
     }
@@ -208,7 +213,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           flexDirection: 'column',
           alignItems: 'center',
           padding: '1.1rem 0 1.2rem 0',
-          background: 'var(--background)',
+          background: bg === 'light' ? '#F2F2F2' : 'var(--background)',
           position: 'relative',
           fontFamily: 'Roboto, Arial, Helvetica, sans-serif',
         }}>
@@ -243,7 +248,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
               >
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 32, marginBottom: 10 }}>
                   <img
-                    src="/assets/lillelogo.png"
+                    src={bg === 'dark' ? "/assets/lillelogo4.svg" : "/assets/lillelogo1.svg"}
                     alt="Artmoments lille logo"
                     style={{
                       width: 160,
@@ -306,7 +311,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                           fontWeight: isActive ? 700 : 500,
                           padding: isActive ? '0.3rem 1.1rem' : '0.3rem 1rem',
                           borderRadius: 8,
-                          transition: 'all 0.18s',
+                          transition: 'all 0.18s cubic-bezier(.4,1.2,.4,1)',
                           display: 'inline-flex',
                           alignItems: 'center',
                           verticalAlign: 'middle',
@@ -315,6 +320,16 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                           fontSize: isActive ? '1.13rem' : '1rem',
                           transform: isActive ? 'scale(1.08)' : 'none',
                           zIndex: isActive ? 1 : undefined,
+                        }}
+                        onMouseEnter={e => {
+                          e.currentTarget.style.transform = isActive ? 'scale(1.08) translateY(-4px)' : 'translateY(-4px)';
+                          e.currentTarget.style.boxShadow = '0 6px 18px #0002';
+                          e.currentTarget.style.border = 'none';
+                        }}
+                        onMouseLeave={e => {
+                          e.currentTarget.style.transform = isActive ? 'scale(1.08)' : 'none';
+                          e.currentTarget.style.boxShadow = '';
+                          e.currentTarget.style.border = 'none';
                         }}
                       >
                         {cat.name}
